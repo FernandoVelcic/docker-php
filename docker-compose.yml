@@ -1,0 +1,44 @@
+version: "1.0"
+
+services:
+    web:
+        image: nginx:1.17
+        ports:
+            - "80:80"
+        volumes:
+            - ../:/var/www
+            - ./sites:/etc/nginx/conf.d
+        networks:
+            app:
+                aliases:
+                    - php53.vm
+                    - php56.vm
+                    - php70.vm
+
+
+    php53:
+        image: devilbox/php-fpm-5.3:latest
+        volumes:
+            - ../:/var/www
+            - ./php/php53.conf:/usr/local/etc/php-fpm.conf
+        networks:
+            - app
+
+    php56:
+        image: php:5.6-fpm
+        volumes:
+            - ../:/var/www
+            - ./php/php56.conf:/usr/local/etc/php-fpm.d/php.conf
+        networks:
+            - app
+
+    php70:
+        image: php:7.0-fpm
+        volumes:
+            - ../:/var/www
+            - ./php/php70.conf:/usr/local/etc/php-fpm.d/php.conf
+        networks:
+            - app
+
+networks:
+    app:
