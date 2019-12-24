@@ -13,32 +13,47 @@ services:
                 aliases:
                     - php53.vm
                     - php56.vm
-                    - php70.vm
+                    - php71.vm
 
 
     php53:
-        image: devilbox/php-fpm-5.3:latest
+        build:
+            context: ./php/php53
         volumes:
             - ../:/var/www
-            - ./php/php53.conf:/usr/local/etc/php-fpm.conf
+            - ./php/php53/php.conf:/usr/local/etc/php-fpm.conf
         networks:
             - app
 
     php56:
-        image: php:5.6-fpm
+        build:
+            context: ./php/php56
         volumes:
             - ../:/var/www
-            - ./php/php56.conf:/usr/local/etc/php-fpm.d/php.conf
+            - ./php/php56/php.conf:/usr/local/etc/php-fpm.d/php.conf
         networks:
             - app
 
-    php70:
-        image: php:7.0-fpm
+    php71:
+        build:
+            context: ./php/php71
         volumes:
             - ../:/var/www
-            - ./php/php70.conf:/usr/local/etc/php-fpm.d/php.conf
+            - ./php/php71/php.conf:/usr/local/etc/php-fpm.d/php.conf
         networks:
             - app
+
+
+    database01:
+        image: mariadb:10
+        ports:
+            - 3306:3306
+        hostname: mariadb01
+        environment:
+            - MYSQL_ROOT_PASSWORD=root
+        networks:
+            - app
+
 
 networks:
     app:
